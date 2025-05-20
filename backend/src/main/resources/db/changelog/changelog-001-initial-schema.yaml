@@ -1,0 +1,384 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-initial-schema
+      author: setup
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password_hash
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: user_settings
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: default_quiz_size
+                  type: INTEGER
+                  defaultValueNumeric: 7
+              - column:
+                  name: preferred_quiz_types
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: topics
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: files
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: filename
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_path
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_size
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: topic_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uploaded_by
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: upload_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: quizzes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: topic_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quiz_size
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: score
+                  type: DECIMAL(5,2)
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: 'in_progress'
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: completed_at
+                  type: TIMESTAMP
+        - createTable:
+            tableName: questions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quiz_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: question_text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: question_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: correct_answer
+                  type: TEXT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: question_options
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: question_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: option_text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_correct
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+        - createTable:
+            tableName: user_answers
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: question_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_answer
+                  type: TEXT
+              - column:
+                  name: is_correct
+                  type: BOOLEAN
+              - column:
+                  name: feedback
+                  type: TEXT
+              - column:
+                  name: submitted_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: progress
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: topic_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quizzes_taken
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: average_score
+                  type: DECIMAL(5,2)
+                  defaultValueNumeric: 0.00
+              - column:
+                  name: strength_areas
+                  type: TEXT
+              - column:
+                  name: weakness_areas
+                  type: TEXT
+              - column:
+                  name: last_quiz_date
+                  type: TIMESTAMP
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: user_settings
+            baseColumnNames: user_id
+            constraintName: fk_user_settings_user
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: files
+            baseColumnNames: topic_id
+            constraintName: fk_files_topic
+            referencedTableName: topics
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: files
+            baseColumnNames: uploaded_by
+            constraintName: fk_files_user
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: quizzes
+            baseColumnNames: user_id
+            constraintName: fk_quizzes_user
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: quizzes
+            baseColumnNames: topic_id
+            constraintName: fk_quizzes_topic
+            referencedTableName: topics
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: questions
+            baseColumnNames: quiz_id
+            constraintName: fk_questions_quiz
+            referencedTableName: quizzes
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: question_options
+            baseColumnNames: question_id
+            constraintName: fk_question_options_question
+            referencedTableName: questions
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: user_answers
+            baseColumnNames: question_id
+            constraintName: fk_user_answers_question
+            referencedTableName: questions
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: user_answers
+            baseColumnNames: user_id
+            constraintName: fk_user_answers_user
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: progress
+            baseColumnNames: user_id
+            constraintName: fk_progress_user
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: progress
+            baseColumnNames: topic_id
+            constraintName: fk_progress_topic
+            referencedTableName: topics
+            referencedColumnNames: id

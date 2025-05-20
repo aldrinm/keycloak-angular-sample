@@ -1,0 +1,7 @@
+<app-auth-buttons></app-auth-buttons>
+
+<hr/>
+<button (click)="invokeProtectedResource()">Invoke protected resource</button>
+<div>Protected resource: {{ protectedResource.id }}:: {{ protectedResource.content }}</div> 
+
+<router-outlet />
