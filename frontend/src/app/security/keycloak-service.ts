@@ -21,6 +21,11 @@ export class KeycloakService {
         realm: "keycloakangular",
         clientId: "frontend",
       });
+
+      this._keycloak.onTokenExpired = () => {
+        this._keycloak?.updateToken();
+      };
+
     }
     return this._keycloak;
   }
